@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+option go_package="calculatepb";
+
+
+message FindMaxRequest{
+
+    int32 num = 1;
+}
+
+message FindMaxResponse{
+
+    int32 maximum = 1;
+}
+
+
+message SquareRootRequest{
+
+    int32 num = 1;
+}
+
+message SquareRootResponse{
+
+    double number_root = 2;
+}
+
+
+
+service CalculateMaxService{
+
+     rpc FindMaximum(stream FindMaxRequest) returns(stream FindMaxResponse) {};
+
+     //error handling
+     //this RPC will throw an exception if the sent number is negative
+     //This error being sent is asof type INVALID_ARGUMENT
+     rpc SquareRoot(SquareRootRequest) returns (SquareRootResponse) {};
+}

@@ -1,0 +1,30 @@
+============ Ubuntu (Linux) ============
+
+Find the correct protocol buffers version based on your Linux Distro: https://github.com/google/protobuf/releases
+
+Example with x64:
+
+# Make sure you grab the latest version
+curl -OL https://github.com/google/protobuf/releases/download/v3.5.1/protoc-3.5.1-linux-x86_64.zip
+# Unzip
+unzip protoc-3.5.1-linux-x86_64.zip -d protoc3
+# Move protoc to /usr/local/bin/
+sudo mv protoc3/bin/* /usr/local/bin/
+# Move protoc3/include to /usr/local/include/
+sudo mv protoc3/include/* /usr/local/include/
+# Optional: change owner
+sudo chown [user] /usr/local/bin/protoc
+sudo chown -R [user] /usr/local/include/google
+
+
+ You should properly define your GO_PATH - where your go packages live. In other words, GO_PATH is your go workspace. The GO_PATH should be ~/go.
+
+protoc-gen-go should be in your PATH. While protoc-gen-go lives in $GO_PATH/bin after you installed it.
+
+Add these 2 important lines to your ~/.bash_profile:
+
+export GO_PATH=~/go
+export PATH=$PATH:/$GO_PATH/bin
+Then you need to start a new shell session or just type in this line:
+
+$ source ~/.bash_profile
