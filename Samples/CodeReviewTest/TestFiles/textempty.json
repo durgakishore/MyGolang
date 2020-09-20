@@ -1,0 +1,35 @@
+[
+    {
+        "client_msg_id": "76350e92-7687-457e-b95d-be7902aab917",
+        "type": "message",
+        "text": "",
+        "user": "UGMH4H202",
+        "ts": "1551561970.008100",
+        "reactions": [
+            {
+                "name": "grinning",
+                "users": [
+                    "UF2GNRUTV"
+                ],
+                "count": 1
+            },
+            {
+                "name": "+1",
+                "users": [
+                    "UHZNB3HRP",
+                    "UJC8ZDSTX"
+                ],
+                "count": 2
+            }
+        ]
+    },
+    {
+        "client_msg_id": "06debb41-a56f-4ea8-a219-35510090de95",
+        "type": "message",
+        "text": "",
+        "user": "UGMH4H202",
+        "ts": "1551562089.008200",
+        "thread_ts": "1551441260.002300",
+        "parent_user_id": "UBRS4E6B1"
+    }
+]
