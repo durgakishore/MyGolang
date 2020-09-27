@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"os"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"gopkg.in/mgo.v2/bson"
@@ -111,12 +113,48 @@ func main() {
 		fmt.Println("Error while DeleteOne execution")
 	}
 
+	//FindOne
+
+	filter = bson.M{"EmpID": bson.M{"$eq": 222}}
+	result := dboperations.FindOne(filter)
+
+	r := data{}
+	if err := result.Decode(&r); err != nil {
+		fmt.Println("error while reading data from FindOne")
+	} else {
+		fmt.Println(r)
+	}
+	//Find()
+	//ctx, _ := context.WithTimeout(context.Background(), 15*time.Second)
+	cursor, err1 := dboperations.Find(bson.M{})
+
+	if err1 != nil {
+
+	} else {
+		for cursor.Next(context.Background()) {
+
+			var result bson.M
+			err := cursor.Decode(&result)
+
+			if err != nil {
+				fmt.Println("cursor.Next() error:", err)
+				os.Exit(1)
+			} else {
+				//fmt.Println("\nresult type:", reflect.TypeOf(result))
+				fmt.Println("result:", result)
+			}
+		}
+	}
+
+	//DeleteMany
+
 	filter = bson.M{"Age": bson.M{"$lte": 33}}
 	dboperations.DeleteMany(filter)
 	if err != nil {
 		fmt.Println("Error while DeleteOne execution")
 	}
 
+	//DeleteAll
 	filter = bson.M{} //Delete all the data from a collection  like RemoveAll()
 	dboperations.DeleteMany(filter)
 	if err != nil {

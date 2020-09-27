@@ -91,3 +91,20 @@ func (db *database) DeleteMany(filter interface{}) error {
 	}
 	return nil
 }
+
+func (db *database) Find(filter interface{}) (*mongo.Cursor, error) {
+
+	// Declare Context type object for managing multiple API requests
+	cursor, err := db.collection.Find(context.TODO(), filter)
+	if err != nil {
+		fmt.Println("Finding all documents ERROR:", err)
+		defer cursor.Close(context.Background())
+	}
+	return cursor, err
+}
+
+func (db *database) FindOne(filter interface{}) *mongo.SingleResult {
+
+	// Declare Context type object for managing multiple API requests
+	return db.collection.FindOne(context.TODO(), filter)
+}
