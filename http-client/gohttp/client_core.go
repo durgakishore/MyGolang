@@ -95,6 +95,10 @@ func (c *httpClient) getResponseTimeout() time.Duration {
 		return c.requestTimeout
 	}
 
+	if c.disableTimeouts {
+		return 0
+	}
+
 	return defaultResponseTimeout
 }
 
@@ -103,6 +107,9 @@ func (c *httpClient) getConnectionTimeout() time.Duration {
 		return c.connectionTimeout
 	}
 
+	if c.disableTimeouts {
+		return 0
+	}
 	return defaultConnectionTimeout
 }
 
