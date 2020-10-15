@@ -9,11 +9,11 @@ import (
 	"strings"
 )
 
-func (c *httpClient) getRequestbody(contentType string, body interface{}) ([]byte, error) {
+func (c *httpClient) getRequestBody(contentType string, body interface{}) ([]byte, error) {
 
 	if body == nil {
 
-		return nil, errors.New("request body is nil")
+		return nil, nil
 	}
 
 	switch strings.ToLower(contentType) {
@@ -34,7 +34,7 @@ func (c *httpClient) do(method string, url string, headers http.Header, body int
 
 	fullHeaders := c.getRequestHeaders(headers)
 
-	requestBody, err := c.getRequestbody(fullHeaders.Get("Content-Type"), body)
+	requestBody, err := c.getRequestBody(fullHeaders.Get("Content-Type"), body)
 
 	if err != nil {
 		return nil, err
