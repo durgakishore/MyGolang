@@ -14,10 +14,12 @@ var (
 	m       = &sync.RWMutex{}
 	chCache = make(chan Book)
 	chDb    = make(chan Book)
+	chDone  = make(chan bool)
 )
 
 func main() {
 
+	go printingbook()
 	for i := 0; i < 10; i++ {
 
 		id := rd.Intn(10) + 1
@@ -33,30 +35,38 @@ func main() {
 		}(id, m, wg, chCache)
 
 		go func(id int, m *sync.RWMutex, wg *sync.WaitGroup, ch chan Book) {
-			if b, ok := queryFromDatabase(id); ok {
-				m.Lock()
-				cache[id] = b
-				m.Unlock()
-				ch <- b
+
+			if _, ok := cache[id]; !ok {
+				if b, ok := queryFromDatabase(id); ok {
+					m.Lock()
+					cache[id] = b
+					m.Unlock()
+					ch <- b
+				}
 			}
 			wg.Done()
 		}(id, m, wg, chDb)
-
-		go func(chCache, chDb chan Book) {
-
-			select {
-			case b := <-chCache:
-				fmt.Println("from cache")
-				fmt.Println(b)
-				<-chDb
-			case b := <-chDb:
-				fmt.Println("from database")
-				fmt.Println(b)
-			}
-		}(chCache, chDb)
-		time.Sleep(150 * time.Millisecond)
+		wg.Wait()
 	}
-	wg.Wait()
+	chDone <- true
+	time.Sleep(50 * time.Millisecond)
+	fmt.Println("Execution is done")
+}
+
+func printingbook() {
+loop:
+	for {
+		select {
+		case b := <-chCache:
+			fmt.Println("from cache")
+			fmt.Println(b)
+		case b := <-chDb:
+			fmt.Println("from database")
+			fmt.Println(b)
+		case <-chDone:
+			break loop
+		}
+	}
 }
 
 func queryFromCache(id int, m *sync.RWMutex) (Book, bool) {
